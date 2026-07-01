@@ -194,32 +194,38 @@ $$
 - 返回：迭代矩阵的谱半径
 ## 可视化代码说明
 ### plot_matrix_heatmap
-说明：生成系数矩阵的结构热力图，用于直观展示矩阵元素的数值分布、对称性以及稀疏性特征。
 
+说明：生成系数矩阵 A的结构热力图。该函数利用颜色深浅直观展示矩阵元素的数值分布情况，有助于分析矩阵的稀疏性、对称性或特殊结构（如三对角矩阵）。
+  
   参数
-
-    coefficient – 系数矩阵A
-
-返回：无返回值（图表自动保存至 figures/task1_heatmap.png）
+    
+    A – 系数矩阵 A（通常为二维 NumPy 数组）。
+  返回
+    
+    无返回值。函数会自动创建 figures 目录（如果不存在），将图像保存为 task1_heatmap.png 并调用 plt.show() 显示。
 ### plot_error_curves
-说明：绘制迭代误差随步数变化的收敛曲线（采用对数坐标）。支持同时对比 Jacobi 与 Gauss-Seidel 方法的收敛速度，并绘制收敛阈值参考线。
 
+说明：绘制迭代算法的收敛曲线。该函数使用半对数坐标系（Y轴为对数坐标）展示 Jacobi 和 Gauss-Seidel 方法的相对误差随迭代步数的变化趋势，并绘制收敛阈值参考线，用于直观判断算法的收敛速度。
   参数
+    
+    jacobi_hist – Jacobi 迭代过程中的误差历史列表（List 或 Array）。
+    
+    gs_hist – Gauss-Seidel 迭代过程中的误差历史列表（可选，默认为 None）。
+    
+    tol – 收敛阈值（float），用于在图中绘制水平参考线（默认为 1e-8）。
+  返回
 
-    jacobi_history – Jacobi 迭代过程中的相对误差历史列表
-
-    tolerance – 设定的收敛误差阈值（默认值为 1e-8）
-
-返回：无返回值（图表自动保存至 figures/task1_convergence_curve.png）
+    无返回值。图像将被保存为 task1_convergence_curve.png 并显示。
 ### plot_solution_comparison
-说明：绘制数值解与参考解的对比图。精确参考解以折线图形式作为基准，迭代法求得的近似解以散点图形式叠加展示，用于直观验证迭代算法的逼近精度。
 
+说明：绘制数值解与精确解的对比图。该函数将直接法（如 LU 分解）求得的精确解作为基准折线，将迭代法求得的近似解以散点形式叠加，用于验证迭代解的精度。
   参数
-
-    exact_solution – 精确参考解向量（通常由直接法如 LU 分解或 np.linalg.solve 获得）
-
-    jacobi_x – Jacobi 迭代求得的数值解向量
-
-    gs_x – Gauss-Seidel 迭代求得的数值解向量（可选）
-
-返回：无返回值（图表自动保存至 figures/task1_solution_comparison.png）
+    
+    x_exact – 精确解向量（由直接法求得）。
+    
+    jacobi_x – Jacobi 迭代求得的近似解向量。
+    
+    gs_x – Gauss-Seidel 迭代求得的近似解向量（可选，默认为 None）。
+  返回
+    
+    无返回值。图像将被保存为 task1_solution_comparison.png 并显示。
