@@ -128,7 +128,7 @@ $$
 
   注意此处 $\mathbf {x}^{(k + 1)}$ 在计算 $x_i^{(k + 1)}$ 时，前 $i - 1$ 个分量已更新为最新值。
 
-## 代码说明
+## 核心代码说明
 
 ### `solve_with_np_builtin`
 
@@ -192,3 +192,34 @@ $$
     - `GS`
 
 - 返回：迭代矩阵的谱半径
+## 可视化代码说明
+### plot_matrix_heatmap
+说明：生成系数矩阵的结构热力图，用于直观展示矩阵元素的数值分布、对称性以及稀疏性特征。
+
+  参数
+
+    coefficient – 系数矩阵A
+
+返回：无返回值（图表自动保存至 figures/task1_heatmap.png）
+### plot_error_curves
+说明：绘制迭代误差随步数变化的收敛曲线（采用对数坐标）。支持同时对比 Jacobi 与 Gauss-Seidel 方法的收敛速度，并绘制收敛阈值参考线。
+
+  参数
+
+    jacobi_history – Jacobi 迭代过程中的相对误差历史列表
+
+    tolerance – 设定的收敛误差阈值（默认值为 1e-8）
+
+返回：无返回值（图表自动保存至 figures/task1_convergence_curve.png）
+### plot_solution_comparison
+说明：绘制数值解与参考解的对比图。精确参考解以折线图形式作为基准，迭代法求得的近似解以散点图形式叠加展示，用于直观验证迭代算法的逼近精度。
+
+  参数
+
+    exact_solution – 精确参考解向量（通常由直接法如 LU 分解或 np.linalg.solve 获得）
+
+    jacobi_x – Jacobi 迭代求得的数值解向量
+
+    gs_x – Gauss-Seidel 迭代求得的数值解向量（可选）
+
+返回：无返回值（图表自动保存至 figures/task1_solution_comparison.png）
