@@ -151,9 +151,10 @@ def iterate_solution(
     init_solution: np.ndarray | None = None,
     max_iterations: int = 1000,
     tolerance: float = 1e-8,
-) -> tuple[bool, int, np.ndarray]:
+) -> tuple[bool, int, np.ndarray, list]: 
     unknown: int = coefficient.shape[0]
-    solution = init_solution if init_solution else np.zeros(unknown)
+    solution = init_solution if init_solution is not None else np.zeros(unknown)
+    
 
     iteration = None
     match function:
@@ -162,28 +163,25 @@ def iterate_solution(
         case "GS":
             iteration = _iterate_gauss_seidel
         case _:
-            raise
+            raise ValueError(f"未知的迭代方法: {function}")
+
+
+    error_history = []
+
 
     for i in range(max_iterations):
         old_solution = solution.copy()
-        solution = iteration(
-            coefficient,
-            constant,
-            solution,
-        )
 
-        if np.linalg.norm(solution - old_solution) < tolerance:
-            return (
-                True,
-                i + 1,
-                solution,
-            )
+        solution = iteration(coefficient, constant, solution)
+        
+        current_error = np.linalg.norm(solution - old_solution)
+        
+        error_history.append(current_error)
 
-    return (
-        False,
-        max_iterations,
-        solution,
-    )
+        if current_error < tolerance:
+            return (True, i + 1, solution, error_history)
+    
+    return (False, max_iterations, solution, error_history)
 
 
 def iterate_solution_alt(
@@ -249,3 +247,5 @@ def calculate_spectral_radius(
             raise
 
     return np.max(np.abs(np.linalg.eigvals(iteration)))
+
+
