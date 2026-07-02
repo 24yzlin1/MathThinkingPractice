@@ -5,6 +5,10 @@ import typing as t
 
 class BootstrapSample(t.TypedDict):
     sample: list[float]
+    mean: float
+    median: float
+    variance: float
+    standard: float
 
 
 class Distribution(t.TypedDict):
@@ -23,17 +27,23 @@ def _resample(data: list[float]) -> BootstrapSample:
         k=len(data),
     )
 
-    return {"sample": sample}
+    return {
+        "sample": sample,
+        "mean": sum(sample) / len(sample),
+        "median": float(np.median(sample)),
+        "variance": float(np.var(sample)),
+        "standard": float(np.std(sample)),
+    }
 
 
 def generate_distribution(
     data: list[float],
+    statistical_function: str = "mean",
     iterations: int = 1000,
     confidence_quantile: tuple[float, float] = (2.5, 97.5),
 ) -> Distribution:
     samples: list[BootstrapSample] = [_resample(data) for _ in range(iterations)]
-    samples_without_statistics: list[list[float]] = [x["sample"] for x in samples]
-    bootstrap: list[float] = [sum(x) / len(x) for x in samples_without_statistics]
+    bootstrap: list[float] = [x[statistical_function] for x in samples]
 
     median: float = float(np.median(data))
     point_estimate: float = sum(data) / len(data)
