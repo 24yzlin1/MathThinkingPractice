@@ -2,6 +2,7 @@ import numpy as np
 import typing as t
 
 from core import *
+from visualize import *
 
 
 class Dataset(t.TypedDict):
@@ -82,24 +83,38 @@ def test_iterative_methods(set: Dataset) -> None:
     print(f"\tSolution vector: {x_np}")
     print()
 
-    converged, iteration, x_gs = iterate_solution(a_matrix, b_vector, "GS")
+    converged, iteration, x_gs, _ = iterate_solution(a_matrix, b_vector, "GS")
     print("Gauss-Seidel iteration:")
     print(f"\tConverged: {converged}\tIterations: {iteration}")
     print(f"\tSolution vector: {x_gs}")
     print()
 
-    converged, iteration, x_jacobi = iterate_solution(a_matrix, b_vector, "JACOBI")
+    converged, iteration, x_jacobi, _ = iterate_solution(a_matrix, b_vector, "JACOBI")
     print("Jacobi iteration:")
     print(f"\tConverged: {converged}\tIterations: {iteration}")
     print(f"\tSolution vector: {x_jacobi}")
     print()
 
 
-# def test_visualize(set: Dataset) -> None:
-#     ()
-
-
 # Run the test on all three provided datasets
 # test_iterative_methods(set1)
 # test_iterative_methods(set2)
 # test_iterative_methods(set3)
+
+a_matrix: np.ndarray = set1["a_matrix"]
+b_vector: np.ndarray = set1["b_vector"]
+
+exact_x = solve_with_np_builtin(a_matrix, b_vector)
+
+success_j, steps_j, jacobi_x, jacobi_hist = iterate_solution(
+    coefficient=a_matrix, constant=b_vector, function="JACOBI"
+)
+
+success_gs, steps_gs, gs_x, gs_hist = iterate_solution(
+    coefficient=a_matrix, constant=b_vector, function="GS"
+)
+
+
+plot_matrix_heatmap(a_matrix)
+plot_error_curves(jacobi_hist, gs_hist)
+plot_solution_comparison(exact_x, jacobi_x, gs_x)
