@@ -64,6 +64,53 @@ def _iterate_gauss_seidel(
     return solution
 
 
+def _build_jacobi_iteration(
+    coefficient: np.ndarray,
+    constant: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    unknown: int = coefficient.shape[0]
+
+    d_matrix_inverse: np.ndarray = np.zeros((unknown, unknown))
+    lpu_matrix: np.ndarray = np.zeros((unknown, unknown))
+
+    # 构造D^(-1)和(L+U)矩阵
+    for i in range(unknown):
+        for j in range(unknown):
+            if i == j:
+                d_matrix_inverse[i][j] = 1 / coefficient[i][j]
+            else:
+                lpu_matrix[i][j] = -coefficient[i][j]
+
+    return (
+        d_matrix_inverse @ lpu_matrix,
+        d_matrix_inverse @ constant,
+    )
+
+
+def _build_gauss_seidel_iteration(
+    coefficient: np.ndarray,
+    constant: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    unknown: int = coefficient.shape[0]
+
+    dsl_matrix: np.ndarray = np.zeros((unknown, unknown))
+    u_matrix: np.ndarray = np.zeros((unknown, unknown))
+
+    for i in range(unknown):
+        for j in range(unknown):
+            if i < j:
+                u_matrix[i][j] = -coefficient[i][j]  # U部分取负
+            elif i > j:
+                dsl_matrix[i][j] = coefficient[i][j]  # L部分
+            else:
+                dsl_matrix[i][j] = coefficient[i][j]  # D部分
+
+    return (
+        np.linalg.inv(dsl_matrix) @ u_matrix,
+        np.linalg.inv(dsl_matrix) @ constant,
+    )
+
+
 def solve_with_np_builtin(
     coefficient: np.ndarray,
     constant: np.ndarray,
@@ -124,6 +171,50 @@ def iterate_solution(
             constant,
             solution,
         )
+
+        if np.linalg.norm(solution - old_solution) < tolerance:
+            return (
+                True,
+                i + 1,
+                solution,
+            )
+
+    return (
+        False,
+        max_iterations,
+        solution,
+    )
+
+
+def iterate_solution_alt(
+    coefficient: np.ndarray,
+    constant: np.ndarray,
+    function: str,
+    init_solution: np.ndarray | None = None,
+    max_iterations: int = 1000,
+    tolerance: float = 1e-8,
+) -> tuple[bool, int, np.ndarray]:
+    unknown: int = coefficient.shape[0]
+    solution = init_solution if init_solution else np.zeros(unknown)
+
+    iteration_coefficient, iteration_constant = (None, None)
+    match function:
+        case "JACOBI":
+            iteration_coefficient, iteration_constant = _build_jacobi_iteration(
+                coefficient,
+                constant,
+            )
+        case "GS":
+            iteration_coefficient, iteration_constant = _build_gauss_seidel_iteration(
+                coefficient,
+                constant,
+            )
+        case _:
+            raise
+
+    for i in range(max_iterations):
+        old_solution = solution.copy()
+        solution = iteration_coefficient @ old_solution + iteration_constant
 
         if np.linalg.norm(solution - old_solution) < tolerance:
             return (
