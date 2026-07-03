@@ -3,16 +3,8 @@ import numpy as np
 import typing as t
 
 
-class BootstrapSample(t.TypedDict):
-    sample: list[float]
-    mean: float
-    median: float
-    variance: float
-    standard: float
-
-
 class Distribution(t.TypedDict):
-    samples: list[BootstrapSample]
+    samples: list[list[float]]
     bootstrap: list[float]
     median: float
     point_estimate: float
@@ -21,19 +13,19 @@ class Distribution(t.TypedDict):
     confidence_interval: tuple[float, float]
 
 
-def _resample(data: list[float]) -> BootstrapSample:
-    sample: list[float] = random.choices(
+statistical_functions: dict[str, t.Callable[[list[float]], float]] = {
+    "mean": lambda x: sum(x) / len(x),
+    "median": lambda x: float(np.median(x)),
+    "variance": lambda x: float(np.var(x, ddof=0)),  # 或 ddof=1 样本方差
+    "standard": lambda x: float(np.std(x, ddof=0)),
+}
+
+
+def _resample(data: list[float]) -> list[float]:
+    return random.choices(
         data,
         k=len(data),
     )
-
-    return {
-        "sample": sample,
-        "mean": sum(sample) / len(sample),
-        "median": float(np.median(sample)),
-        "variance": float(np.var(sample)),
-        "standard": float(np.std(sample)),
-    }
 
 
 def generate_distribution(
@@ -41,12 +33,15 @@ def generate_distribution(
     statistical_function: str = "mean",
     iterations: int = 1000,
     confidence_quantile: tuple[float, float] = (2.5, 97.5),
+    z_score: float = 1,
 ) -> Distribution:
-    samples: list[BootstrapSample] = [_resample(data) for _ in range(iterations)]
-    bootstrap: list[float] = [x[statistical_function] for x in samples]
+    statistical = statistical_functions[statistical_function]
 
-    median: float = float(np.median(data))
-    point_estimate: float = sum(data) / len(data)
+    samples: list[list[float]] = [_resample(data) for _ in range(iterations)]
+    bootstrap: list[float] = [statistical(x) for x in samples]
+
+    median: float = float(np.median(bootstrap))
+    point_estimate: float = float(statistical(data))
     standard_error: float = float(np.std(bootstrap))
 
     confidence_quantile_lower, confidence_quantile_upper = confidence_quantile
@@ -70,8 +65,8 @@ def generate_distribution(
         "point_estimate": point_estimate,
         "standard_error": standard_error,
         "standard_error_interval": (
-            point_estimate - standard_error,
-            point_estimate + standard_error,
+            point_estimate - standard_error * z_score,
+            point_estimate + standard_error * z_score,
         ),
         "confidence_interval": (
             confidence_interval_lower,

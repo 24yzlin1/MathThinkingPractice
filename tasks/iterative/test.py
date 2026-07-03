@@ -49,15 +49,15 @@ set2: Dataset = {
 set3: Dataset = {
     "a_matrix": np.array(
         [
-            [4, -1.5, 0, -1, 0, 0, 0, 0, 0],
-            [-1.5, 4, -1, 0, -1, 0, 0, 0, 0],
-            [0, -1, 4, 0, 0, -1, 0, 0, 0],
-            [-1, 0, 0, 4, -1, 0, -1, 0, 0],
-            [0, -1, 0, -1, 4, -1.5, 0, -1, 0],
-            [0, 0, -1, 0, -1.5, 4, 0, 0, -1],
-            [0, 0, 0, -1, 0, 0, 4, -1, 0],
-            [0, 0, 0, 0, -1, 0, -1, 4, -1],
-            [0, 0, 0, 0, 0, -1, 0, -1, 4],
+            [4, -2, 0, -2, 0, 0, 0, 0, 0],
+            [-2, 4, -2, 0, -2, 0, 0, 0, 0],
+            [0, -2, 4, 0, 0, -2, 0, 0, 0],
+            [-2, 0, 0, 4, -2, 0, -2, 0, 0],
+            [0, -2, 0, -2, 4, -2, 0, -2, 0],
+            [0, 0, -2, 0, -2, 4, 0, 0, -2],
+            [0, 0, 0, -2, 0, 0, 4, -2, 0],
+            [0, 0, 0, 0, -2, 0, -2, 4, -2],
+            [0, 0, 0, 0, 0, -2, 0, -2, 4],
         ]
     ),
     "b_vector": np.array([310, 180, 250, 130, 0, 70, 170, 40, 110]),
@@ -76,45 +76,52 @@ def test_iterative_methods(set: Dataset) -> None:
 
     print(f"Coefficient matrix A:\n{a_matrix}")
     print(f"Constant vector b:\n{b_vector}")
+
     print()
 
     x_np = solve_with_np_builtin(a_matrix, b_vector)
     print("NumPy built-in solution (np.linalg.solve):")
-    print(f"\tSolution vector: {x_np}")
+    print(f"\tSolution vector:\n\t{x_np}")
     print()
 
     converged, iteration, x_gs, _ = iterate_solution(a_matrix, b_vector, "GS")
+    spectral_radius = calculate_spectral_radius(a_matrix, "GS")
     print("Gauss-Seidel iteration:")
-    print(f"\tConverged: {converged}\tIterations: {iteration}")
-    print(f"\tSolution vector: {x_gs}")
+    print(f"\tConverged: {converged}")
+    print(f"\tIterations: {iteration}")
+    print(f"\tSpectral Radius: {spectral_radius}")
+    print(f"\tSolution vector:\n\t{x_gs}")
     print()
 
     converged, iteration, x_jacobi, _ = iterate_solution(a_matrix, b_vector, "JACOBI")
+    spectral_radius = calculate_spectral_radius(a_matrix, "JACOBI")
     print("Jacobi iteration:")
-    print(f"\tConverged: {converged}\tIterations: {iteration}")
-    print(f"\tSolution vector: {x_jacobi}")
+    print(f"\tConverged: {converged}")
+    print(f"\tIterations: {iteration}")
+    print(f"\tSpectral Radius: {spectral_radius}")
+    print(f"\tSolution vector:\n\t{x_jacobi}")
     print()
 
 
-# Run the test on all three provided datasets
-# test_iterative_methods(set1)
-# test_iterative_methods(set2)
-# test_iterative_methods(set3)
+def test_plot(set: Dataset):
+    a_matrix: np.ndarray = set["a_matrix"]
+    b_vector: np.ndarray = set["b_vector"]
 
-a_matrix: np.ndarray = set1["a_matrix"]
-b_vector: np.ndarray = set1["b_vector"]
+    exact_x = solve_with_np_builtin(a_matrix, b_vector)
 
-exact_x = solve_with_np_builtin(a_matrix, b_vector)
+    _, _, jacobi_x, jacobi_hist = iterate_solution(
+        coefficient=a_matrix, constant=b_vector, function="JACOBI"
+    )
 
-success_j, steps_j, jacobi_x, jacobi_hist = iterate_solution(
-    coefficient=a_matrix, constant=b_vector, function="JACOBI"
-)
+    _, _, gs_x, gs_hist = iterate_solution(
+        coefficient=a_matrix, constant=b_vector, function="GS"
+    )
 
-success_gs, steps_gs, gs_x, gs_hist = iterate_solution(
-    coefficient=a_matrix, constant=b_vector, function="GS"
-)
+    plot_matrix_heatmap(a_matrix)
+    plot_error_curves(jacobi_hist, gs_hist)
+    plot_solution_comparison(exact_x, jacobi_x, gs_x)
 
 
-plot_matrix_heatmap(a_matrix)
-plot_error_curves(jacobi_hist, gs_hist)
-plot_solution_comparison(exact_x, jacobi_x, gs_x)
+if __name__ == "__main__":
+    test_iterative_methods(set3)
+    test_plot(set3)

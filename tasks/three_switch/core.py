@@ -16,7 +16,7 @@ def toggle_bit(
     index: int,
 ) -> list[int]:
     new_switches = switches.copy()
-    new_switches[index] = not new_switches[index]
+    new_switches[index] = int(not new_switches[index])
     return new_switches
 
 
@@ -30,7 +30,3 @@ def get_inputs(switch_count: int = 3) -> list[list[int]]:
 
 def build_truth_table(switch_count: int = 3) -> list[tuple[list[int], int]]:
     return [(x, get_light(x)) for x in get_inputs(switch_count)]
-
-
-for k, v in build_truth_table():
-    print("".join(map(str, k)), "->", v)
