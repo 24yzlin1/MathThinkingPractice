@@ -2,9 +2,7 @@
 # --- 1. 导入核心逻辑 ---
 from core import build_truth_table, toggle_bit, get_light
 
-# --- 2. 导入可视化函数 ---
-# 注意：这里假设 test.py 和 visualize.py 在同一级目录下
-from visualize import plot_truth_table_matrix, plot_state_space_graph
+from visualize import plot_truth_table_matrix, plot_state_space_graph, plot_output_state_distribution, plot_correctness_verification_table
 
 
 def test_truth_table(switch_count: int = 3):
@@ -65,9 +63,9 @@ def test_toggle_bit(switch_count: int = 3):
 
 
 if __name__ == "__main__":
-
     test_truth_table()
-
     test_visualization()
-    
     test_toggle_bit()
+
+    plot_output_state_distribution()
+    plot_correctness_verification_table()

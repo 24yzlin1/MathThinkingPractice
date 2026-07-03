@@ -109,3 +109,78 @@ def plot_state_space_graph(switch_count=3, highlight_path=None):
     plt.savefig(path, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"已保存: {path}")
+
+def plot_output_state_distribution(switch_count=3):
+
+    print("正在生成输出状态分布图...")
+    truth_table = build_truth_table(switch_count)
+    
+    # 统计亮灭数量
+    count_on = sum(1 for _, light in truth_table if light == 1)
+    count_off = len(truth_table) - count_on
+    
+    labels = [f'Light OFF (L=0) - {count_off} states', f'Light ON (L=1) - {count_on} states']
+    sizes = [count_off, count_on]
+    colors = ['#ff9999', '#99ff99'] # 与你真值表中的颜色保持一致
+    
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%',
+            shadow=True, startangle=140, textprops={'fontsize': 12})
+    plt.title("Output State Distribution\n(Light ON vs OFF Ratio)", fontsize=14)
+    plt.axis('equal')  # 保证饼图是正圆
+    
+    save_path = os.path.join(OUTPUT_DIR, 'result_output_distribution.png')
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"已保存: {save_path}")
+
+def plot_correctness_verification_table(switch_count=3):
+
+    print("正在生成正确性验证表...")
+    truth_table = build_truth_table(switch_count)
+    
+
+    table_data = []
+    for switches, light in truth_table:
+        # 理论值：三控开关理论就是奇偶校验
+        theoretical = sum(switches) % 2
+        # 实际值：来自你的核心逻辑
+        actual = light
+        # 验证结果
+        is_correct = theoretical == actual
+        row = [
+            f"{switches[0]}", f"{switches[1]}", f"{switches[2]}",
+            str(theoretical), str(actual), 
+            "PASS ✔" if is_correct else "FAIL ✘"
+        ]
+        table_data.append(row)
+        
+    plt.figure(figsize=(10, 6))
+    plt.axis('off')
+    
+    col_labels = ['S1', 'S2', 'S3', 'Theoretical', 'Actual Code', 'Verification']
+    
+    table = plt.table(cellText=table_data, colLabels=col_labels, loc='center', cellLoc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(12)
+    table.scale(1.2, 1.8)
+    
+    # 样式美化
+    for j in range(len(col_labels)):
+        table[0, j].set_facecolor("#4CAF50")  # 表头绿色
+        table[0, j].set_text_props(color="white", fontweight='bold')
+        
+    for i in range(len(truth_table)):
+        if table_data[i][5] == "PASS ✔":
+            table[i+1, 5].set_facecolor("#C8E6C9")  # PASS 浅绿
+        else:
+            table[i+1, 5].set_facecolor("#FFCDD2")  # FAIL 浅红
+            
+    plt.title("Correctness Verification Table\n(Theoretical vs Actual Code Output)", fontsize=14, pad=20)
+    
+    save_path = os.path.join(OUTPUT_DIR, 'result_correctness_verification.png')
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"已保存: {save_path}")
