@@ -56,6 +56,86 @@ $$
 L = S_1 \oplus S_2 \oplus S_3
 $$
 
+### 结构可视化
+
+#### 超立方体结构图
+
+```mermaid
+graph LR
+    S0(000<br>L=0) --- S1(001<br>L=1)
+    S0 --- S2(010<br>L=1)
+    S0 --- S4(100<br>L=1)
+
+    S1 --- S3(011<br>L=0)
+    S1 --- S5(101<br>L=0)
+
+    S2 --- S3
+    S2 --- S6(110<br>L=0)
+
+    S4 --- S5
+    S4 --- S6
+
+    S3 --- S7(111<br>L=1)
+    S5 --- S7
+    S6 --- S7
+
+    classDef l1 fill:#a8e6cf,stroke:#333
+    classDef l0 fill:#ffd3b6,stroke:#333
+
+    class S1,S2,S4,S7 l1;
+    class S0,S3,S5,S6 l0;
+```
+
+#### 完整状态转换表
+
+```mermaid
+flowchart TD
+    000((000<br>L=0)) -->|翻转S3| 001((001<br>L=1))
+    000 -->|翻转S2| 010((010<br>L=1))
+    000 -->|翻转S1| 100((100<br>L=1))
+
+    001 -->|翻转S2| 011((011<br>L=0))
+    001 -->|翻转S1| 101((101<br>L=0))
+
+    010 -->|翻转S3| 011
+    010 -->|翻转S1| 110((110<br>L=0))
+
+    100 -->|翻转S3| 101
+    100 -->|翻转S2| 110
+
+    011 -->|翻转S1| 111((111<br>L=1))
+    101 -->|翻转S2| 111
+    110 -->|翻转S3| 111
+
+    classDef l1 fill:#a8e6cf,stroke:#333
+    classDef l0 fill:#ffd3b6,stroke:#333
+
+    class 000 l0
+    class 011 l0
+    class 110 l0
+    class 101 l0
+    class 001 l1
+    class 010 l1
+    class 100 l1
+    class 111 l1
+```
+
+#### 布尔表达式结构图
+
+```mermaid
+flowchart TD
+    L([L]) --> OR(∨)
+    OR --> A1(∧)
+    OR --> A2(∧)
+    OR --> A3(∧)
+    OR --> A4(∧)
+
+    A1 --> N1(¬S1) & N2(¬S2) & S3_1(S3)
+    A2 --> N1b(¬S1) & S2_1(S2) & N3(¬S3)
+    A3 --> S1_1(S1) & N2b(¬S2) & N3b(¬S3)
+    A4 --> S1_2(S1) & S2_2(S2) & S3_2(S3)
+```
+
 ### 布尔逻辑表达式
 
 将异或展开为与或式 (析取范式)：
@@ -64,11 +144,40 @@ $$
 L = (\overline{S_1} \overline{S_2} S_3) \vee (\overline{S_1} S_2 \overline{S_3}) \vee (S_1 \overline{S_2} \overline{S_3}) \vee (S_1 S_2 S_3)
 $$
 
+```mermaid
+flowchart LR
+    S1([S1]) --> NOT1((NOT))
+    S1 --> A1(AND1) & A3(AND3)
+    S2([S2]) --> NOT2((NOT))
+    S2 --> A1 & A2(AND2) & A4(AND4)
+    S3([S3]) --> NOT3((NOT))
+    S3 --> A2 & A3 & A4
+
+    NOT1 --> A2(AND2)
+    NOT2 --> A3(AND3)
+    NOT3 --> A1(AND1) & A4(AND4)
+
+    A1 -- ¬S1·¬S2·S3 --> OR((OR))
+    A2 -- ¬S1·S2·¬S3 --> OR
+    A3 -- S1·¬S2·¬S3 --> OR
+    A4 -- S1·S2·S3 --> OR
+    OR --> L([L])
+```
+
 亦可等价写为：
 
 $$
 L = S_1 \oplus S_2 \oplus S_3
 $$
+
+```mermaid
+flowchart LR
+    S1([S1]) --> XOR1((XOR))
+    S2([S2]) --> XOR1
+    XOR1 --> XOR2((XOR))
+    S3([S3]) --> XOR2
+    XOR2 --> L([L])
+```
 
 该表达式清晰地表明：灯的亮灭由三个开关中处于闭合 (1) 状态的个数决定 —— 奇数个闭合则灯亮，偶数个闭合则灯灭。因此，任意一个开关翻转都会改变奇偶性，从而翻转灯的状态，符合设计要求。
 
