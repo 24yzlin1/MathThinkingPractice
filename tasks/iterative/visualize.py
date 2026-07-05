@@ -109,7 +109,7 @@ def plot_solution_comparison(x_exact, jacobi_x, gs_x=None):
 
 
 def plot_runtime_comparison(jacobi_time, gs_time):
-    """绘制Jacobi和Gauss-Seidel运行时间对比柱状图"""
+    """绘制Jacobi和Gauss-Seidel的运行时间对比柱状图"""
 
     plt.figure(figsize=(8, 6))
 
