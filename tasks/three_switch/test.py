@@ -1,12 +1,11 @@
 
-# --- 1. 导入核心逻辑 ---
 from core import build_truth_table, toggle_bit, get_light
 
 from visualize import plot_truth_table_matrix, plot_state_space_graph, plot_output_state_distribution, plot_correctness_verification_table
 
 
 def test_truth_table(switch_count: int = 3):
-    print("正在打印真值表...")
+    print("Printing truth table...")
     for k, v in build_truth_table(switch_count):
         print("".join(map(str, k)), "->", v)
     print("-" * 20)
@@ -14,15 +13,12 @@ def test_truth_table(switch_count: int = 3):
 
 def test_visualization():
 
-    print("\n正在生成可视化图片...")
-    
-    # 1. 生成真值表矩阵图
+    print("\nGenerating visualization images...")
+
     plot_truth_table_matrix()
-    
-    # 2. 生成基础状态空间图
+
     plot_state_space_graph()
-    
-    # 3. 生成带演示路径的状态空间图
+
     demo_path = [
         [0, 0, 0],
         [1, 0, 0],
@@ -30,42 +26,41 @@ def test_visualization():
         [1, 1, 1]
     ]
     plot_state_space_graph(highlight_path=demo_path)
-    
-    print("所有图片已生成至 'figures' 文件夹！")
+
+    print("All images saved to 'figures' folder!")
     print("-" * 20)
 
 
 def test_toggle_bit(switch_count: int = 3):
 
     switches = [0] * switch_count
-    print(f"\n进入交互模式 (初始状态: {switches})")
-    print(f"当前灯状态: {get_light(switches)}")
-    print(f"输入 0 ~ {switch_count - 1} 来切换对应开关，输入 'q' 退出。")
-    
+    print(f"\nEnter interactive mode (initial state: {switches})")
+    print(f"Current light state: {get_light(switches)}")
+    print(f"Input 0 ~ {switch_count - 1} to toggle switch, 'q' to quit.")
+
     while True:
-        user_input = input(f"\n请输入开关 (0 ~ {switch_count - 1}): ")
-        
+        user_input = input(f"\nEnter switch (0 ~ {switch_count - 1}): ")
+
         if user_input.lower() == 'q':
-            print(" 退出程序。")
+            print("Exit program.")
             break
-            
+
         try:
             toggle = int(user_input)
             if 0 <= toggle < switch_count:
                 previous = get_light(switches)
                 switches = toggle_bit(switches, toggle)
                 current = get_light(switches)
-                print(f"状态更新: {switches}, 灯: {previous} -> {current}")
+                print(f"State updated: {switches}, Light: {previous} -> {current}")
             else:
-                print(f"请输入 0 到 {switch_count - 1} 之间的数字。")
+                print(f"Please enter a number between 0 and {switch_count - 1}.")
         except ValueError:
-            print(" 输入无效，请输入一个数字或 'q'。")
+            print("Invalid input, please enter a number or 'q'.")
 
 
 if __name__ == "__main__":
     test_truth_table()
     test_visualization()
-    test_toggle_bit()
-
     plot_output_state_distribution()
     plot_correctness_verification_table()
+    test_toggle_bit()

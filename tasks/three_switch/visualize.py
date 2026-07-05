@@ -13,13 +13,12 @@ except ImportError:
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
 
-# 指定输出目录
-OUTPUT_DIR = "figures"
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "figures")
 
 
 def plot_truth_table_matrix(switch_count=3):
 
-    print("正在生成真值表颜色矩阵...")
+    print("Generating truth table color matrix...")
     truth_table = build_truth_table(switch_count)
     
     headers = [f"S{i+1}" for i in range(switch_count)] + ["灯状态(L)"]
@@ -56,13 +55,14 @@ def plot_truth_table_matrix(switch_count=3):
     
     path = os.path.join(OUTPUT_DIR, "truth_table_matrix.png")
     plt.savefig(path, dpi=300, bbox_inches='tight')
+    plt.show()
     plt.close()
-    print(f"已保存: {path}")
+    print(f"Saved: {path}")
 
 
 def plot_state_space_graph(switch_count=3, highlight_path=None):
-   
-    print("正在生成状态空间图...")
+
+    print("Generating state space graph...")
     truth_table = build_truth_table(switch_count)
     
     G = nx.Graph()
@@ -107,12 +107,13 @@ def plot_state_space_graph(switch_count=3, highlight_path=None):
     suffix = "_path" if highlight_path else ""
     path = os.path.join(OUTPUT_DIR, f"state_space{suffix}.png")
     plt.savefig(path, dpi=300, bbox_inches='tight')
+    plt.show()
     plt.close()
-    print(f"已保存: {path}")
+    print(f"Saved: {path}")
 
 def plot_output_state_distribution(switch_count=3):
 
-    print("正在生成输出状态分布图...")
+    print("Generating output state distribution chart...")
     truth_table = build_truth_table(switch_count)
     
     # 统计亮灭数量
@@ -132,12 +133,13 @@ def plot_output_state_distribution(switch_count=3):
     save_path = os.path.join(OUTPUT_DIR, 'result_output_distribution.png')
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.show()
     plt.close()
-    print(f"已保存: {save_path}")
+    print(f"Saved: {save_path}")
 
 def plot_correctness_verification_table(switch_count=3):
 
-    print("正在生成正确性验证表...")
+    print("Generating correctness verification table...")
     truth_table = build_truth_table(switch_count)
     
 
@@ -152,7 +154,7 @@ def plot_correctness_verification_table(switch_count=3):
         row = [
             f"{switches[0]}", f"{switches[1]}", f"{switches[2]}",
             str(theoretical), str(actual), 
-            "PASS ✔" if is_correct else "FAIL ✘"
+            "PASS" if is_correct else "FAIL"
         ]
         table_data.append(row)
         
@@ -182,5 +184,6 @@ def plot_correctness_verification_table(switch_count=3):
     save_path = os.path.join(OUTPUT_DIR, 'result_correctness_verification.png')
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.show()
     plt.close()
-    print(f"已保存: {save_path}")
+    print(f"Saved: {save_path}")

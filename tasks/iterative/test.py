@@ -1,5 +1,6 @@
 import numpy as np
 import typing as t
+import time
 
 from core import *
 from visualize import *
@@ -109,17 +110,22 @@ def test_plot(set: Dataset):
 
     exact_x = solve_with_np_builtin(a_matrix, b_vector)
 
+    start_time = time.perf_counter()
     _, _, jacobi_x, jacobi_hist = iterate_solution(
         coefficient=a_matrix, constant=b_vector, function="JACOBI"
     )
+    jacobi_time = time.perf_counter() - start_time
 
+    start_time = time.perf_counter()
     _, _, gs_x, gs_hist = iterate_solution(
         coefficient=a_matrix, constant=b_vector, function="GS"
     )
+    gs_time = time.perf_counter() - start_time
 
     plot_matrix_heatmap(a_matrix)
     plot_error_curves(jacobi_hist, gs_hist)
     plot_solution_comparison(exact_x, jacobi_x, gs_x)
+    plot_runtime_comparison(jacobi_time, gs_time)
 
 
 if __name__ == "__main__":

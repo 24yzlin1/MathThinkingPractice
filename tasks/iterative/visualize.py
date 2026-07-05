@@ -24,7 +24,7 @@ def plot_matrix_heatmap(A):
     save_path = os.path.join(SAVE_DIR, "task1_heatmap.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
-    print(f"热力图已保存至: {save_path}")
+    print(f"Heatmap saved to: {save_path}")
 
 
 def plot_error_curves(jacobi_hist, gs_hist=None, tol=1e-8):
@@ -65,7 +65,7 @@ def plot_error_curves(jacobi_hist, gs_hist=None, tol=1e-8):
     save_path = os.path.join(SAVE_DIR, "task1_convergence_curve.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
-    print(f"收敛曲线已保存至: {save_path}")
+    print(f"Convergence curve saved to: {save_path}")
 
 
 def plot_solution_comparison(x_exact, jacobi_x, gs_x=None):
@@ -105,4 +105,39 @@ def plot_solution_comparison(x_exact, jacobi_x, gs_x=None):
     save_path = os.path.join(SAVE_DIR, "task1_solution_comparison.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
-    print(f"解对比图已保存至: {save_path}")
+    print(f"Solution comparison saved to: {save_path}")
+
+
+def plot_runtime_comparison(jacobi_time, gs_time):
+    """绘制Jacobi和Gauss-Seidel运行时间对比柱状图"""
+
+    plt.figure(figsize=(8, 6))
+
+    methods = ["Jacobi", "Gauss-Seidel"]
+    times = [jacobi_time * 1000, gs_time * 1000]  # 转换为毫秒
+    colors = ["#4A90D9", "#50C878"]
+
+    bars = plt.bar(methods, times, color=colors, width=0.5, edgecolor="black")
+
+    # 在柱子上方显示数值
+    for bar, time_val in zip(bars, times):
+        plt.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.05,
+            f"{time_val:.4f} ms",
+            ha="center",
+            va="bottom",
+            fontsize=12,
+            fontweight="bold",
+        )
+
+    plt.title("迭代方法运行时间对比", fontsize=14)
+    plt.xlabel("迭代方法")
+    plt.ylabel("运行时间 (ms)")
+    plt.grid(True, axis="y", alpha=0.3)
+    plt.tight_layout()
+
+    save_path = os.path.join(SAVE_DIR, "task1_runtime_comparison.png")
+    plt.savefig(save_path, dpi=300)
+    plt.show()
+    print(f"Runtime comparison saved to: {save_path}")
