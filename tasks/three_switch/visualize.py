@@ -147,7 +147,7 @@ def plot_correctness_verification_table(switch_count=3):
     for switches, light in truth_table:
         # 理论值：三控开关理论就是奇偶校验
         theoretical = sum(switches) % 2
-        # 实际值：来自你的核心逻辑
+        # 实际值：来自核心逻辑
         actual = light
         # 验证结果
         is_correct = theoretical == actual
