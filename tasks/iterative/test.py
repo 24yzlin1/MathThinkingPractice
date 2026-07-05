@@ -5,7 +5,6 @@ import time
 from core import *
 from visualize import *
 
-
 class Dataset(t.TypedDict):
     a_matrix: np.ndarray
     b_vector: np.ndarray
