@@ -3,7 +3,6 @@ from core import build_truth_table, toggle_bit, get_light
 
 from visualize import plot_truth_table_matrix, plot_state_space_graph, plot_output_state_distribution, plot_correctness_verification_table
 
-
 def test_truth_table(switch_count: int = 3):
     print("Printing truth table...")
     for k, v in build_truth_table(switch_count):
