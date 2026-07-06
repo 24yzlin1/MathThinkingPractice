@@ -5,6 +5,7 @@ import time
 from core import *
 from visualize import *
 
+
 class Dataset(t.TypedDict):
     a_matrix: np.ndarray
     b_vector: np.ndarray
@@ -103,7 +104,7 @@ def test_iterative_methods(set: Dataset) -> None:
     print()
 
 
-def test_plot(set: Dataset):
+def test_plot(set: Dataset, name: str = "unnamed"):
     a_matrix: np.ndarray = set["a_matrix"]
     b_vector: np.ndarray = set["b_vector"]
 
@@ -121,12 +122,18 @@ def test_plot(set: Dataset):
     )
     gs_time = time.perf_counter() - start_time
 
-    plot_matrix_heatmap(a_matrix)
-    plot_error_curves(jacobi_hist, gs_hist)
-    plot_solution_comparison(exact_x, jacobi_x, gs_x)
-    plot_runtime_comparison(jacobi_time, gs_time)
+    plot_matrix_heatmap(a_matrix, name)
+    plot_error_curves(jacobi_hist, gs_hist=gs_hist, name=name)
+    plot_solution_comparison(exact_x, jacobi_x, gs_x, name)
+    plot_runtime_comparison(jacobi_time, gs_time, name)
 
 
 if __name__ == "__main__":
+    test_iterative_methods(set1)
+    test_plot(set1, "set1")
+
+    test_iterative_methods(set2)
+    test_plot(set2, "set2")
+
     test_iterative_methods(set3)
-    test_plot(set3)
+    test_plot(set3, "set3")

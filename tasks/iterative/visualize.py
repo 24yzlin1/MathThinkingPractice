@@ -10,7 +10,7 @@ plt.rcParams["axes.unicode_minus"] = False
 SAVE_DIR = "figures"
 
 
-def plot_matrix_heatmap(A):
+def plot_matrix_heatmap(A, name: str):
 
     plt.figure(figsize=(7, 6))
     plt.imshow(A, cmap="coolwarm", aspect="auto")
@@ -21,13 +21,13 @@ def plot_matrix_heatmap(A):
     plt.ylabel("行索引")
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, "task1_heatmap.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_heatmap_{name}.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Heatmap saved to: {save_path}")
 
 
-def plot_error_curves(jacobi_hist, gs_hist=None, tol=1e-8):
+def plot_error_curves(jacobi_hist, name: str, gs_hist=None, tol=1e-8):
 
     plt.figure(figsize=(9, 6))
 
@@ -62,13 +62,13 @@ def plot_error_curves(jacobi_hist, gs_hist=None, tol=1e-8):
     plt.grid(True, which="both", ls="-", alpha=0.5)
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, "task1_convergence_curve.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_convergence_curve_{name}.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Convergence curve saved to: {save_path}")
 
 
-def plot_solution_comparison(x_exact, jacobi_x, gs_x=None):
+def plot_solution_comparison(x_exact, jacobi_x, gs_x, name: str):
 
     plt.figure(figsize=(9, 6))
     indices = np.arange(len(x_exact))
@@ -102,13 +102,13 @@ def plot_solution_comparison(x_exact, jacobi_x, gs_x=None):
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, "task1_solution_comparison.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_solution_comparison_{name}.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Solution comparison saved to: {save_path}")
 
 
-def plot_runtime_comparison(jacobi_time, gs_time):
+def plot_runtime_comparison(jacobi_time, gs_time, name: str):
     """绘制Jacobi和Gauss-Seidel的运行时间对比柱状图"""
 
     plt.figure(figsize=(8, 6))
@@ -137,7 +137,7 @@ def plot_runtime_comparison(jacobi_time, gs_time):
     plt.grid(True, axis="y", alpha=0.3)
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, "task1_runtime_comparison.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_runtime_comparison_{name}.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Runtime comparison saved to: {save_path}")
