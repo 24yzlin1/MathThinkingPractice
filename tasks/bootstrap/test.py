@@ -60,7 +60,6 @@ def test_bootstrap_workflow(
         iterations=iterations,
     )
 
-
 if __name__ == "__main__":
     test_bootstrap_workflow(iterations=100)
     test_bootstrap_workflow(iterations=500)
