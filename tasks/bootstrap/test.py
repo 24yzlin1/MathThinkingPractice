@@ -16,8 +16,8 @@ def test_bootstrap_workflow(
 ):
 
     print(f"\n{'='*50}")
-    print(f" 开始 Bootstrap 分析")
-    print(f" 列名: {column} | 统计量: {statistical_function} | 次数: {iterations}")
+    print(f" Bootstrap Analysis")
+    print(f" Column: {column} | Statistic: {statistical_function} | Iterations: {iterations}")
     print(f"{'='*50}")
 
     data = pd.read_csv("./data/sample_data.csv")
@@ -33,9 +33,9 @@ def test_bootstrap_workflow(
     ci_upper = result["confidence_interval"][1]
     bootstrap_stats = result["bootstrap"]
 
-    print(f" 计算完成:")
-    print(f" 点估计 ({statistical_function}): {point_estimate:.4f}")
-    print(f" 95% 置信区间: [{ci_lower:.4f}, {ci_upper:.4f}]")
+    print(f"\n Results:")
+    print(f"   Point Estimate ({statistical_function}): {point_estimate:.4f}")
+    print(f"   95% CI: [{ci_lower:.4f}, {ci_upper:.4f}]")
 
     plot_original_distribution(
         target_data,
