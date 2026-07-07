@@ -71,9 +71,9 @@ math-thinking-practice
 │  ISSUES.md
 │  LICENSE
 │  main.py
-│  o.txt
 │  pyproject.toml
 │  README.md
+│  requirements.txt
 │  TASK.md
 │  uv.lock
 │
@@ -146,8 +146,6 @@ math-thinking-practice
 - `data/` —— 存放任务三所需的原始样本数据 (CSV 格式)。
 
 - `figures/` —— 所有任务生成的可视化图表 (自动输出)。
-
-- `reports/` —— 实践报告与实践过程文档 (Markdown 格式，按课程模板填写)。
 
 - `main.py` —— 统一入口，可一键运行全部任务并生成图表。
 
