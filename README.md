@@ -65,46 +65,78 @@
 ## 文件结构
 
 ```
-math-thinking-practice/
-├── .gitignore                      # Git 忽略规则
-├── .python-version                 # Python 版本锁定 (3.13)
-├── LICENSE                         # MIT 许可证
-├── README.md                       # 项目说明文档
-├── pyproject.toml                  # 项目元数据与依赖 (PEP 621)
-├── requirements.txt                # 依赖清单 (pip 安装用)
-├── main.py                         # 统一入口：依次运行三个任务
-├── data/                           # 样本数据
-│   └── sample_data.csv             # 任务三使用的原始数据集
-├── figures/                        # 所有生成图表 (自动输出)
-│   ├── task1_heatmap.png           # 任务一：矩阵热力图
-│   ├── task1_convergence.png       # 任务一：收敛曲线
-│   ├── task1_comparison.png        # 任务一：数值解对比
-│   ├── task2_truth_table.png       # 任务二：真值表颜色矩阵
-│   ├── task2_state_space.png       # 任务二：状态空间图
-│   ├── task2_transition.png        # 任务二：状态切换路径
-│   ├── task3_original_dist.png     # 任务三：原始样本分布
-│   ├── task3_bootstrap_dist.png    # 任务三：Bootstrap 统计量分布
-│   └── task3_ci.png                # 任务三：置信区间示意图
-├── reports/                        # 报告文档
-│   ├── 实践报告.md                  # 完整报告 (按模板)
-│   └── 实践过程.md                  # 过程记录 (按模板)
-└── tasks/                          # 所有实验任务
-    ├── __init__.py
-    ├── task1_iterative/            # 任务一：迭代法解线性方程组
-    │   ├── __init__.py
-    │   ├── solver.py               # Jacobi / Gauss-Seidel 实现
-    │   ├── visualize.py            # 生成任务一的全部图表
-    │   └── test_solver.py          # 单元测试 (pytest)
-    ├── task2_three_switch/         # 任务二：三控开关逻辑
-    │   ├── __init__.py
-    │   ├── logic.py                # 真值表、布尔表达式、状态枚举
-    │   ├── visualize.py            # 生成任务二的全部图表
-    │   └── test_logic.py           # 验证逻辑正确性
-    └── task3_bootstrap/            # 任务三：Bootstrap 估计
-        ├── __init__.py
-        ├── bootstrap.py            # 重采样、统计量、置信区间
-        ├── visualize.py            # 生成任务三的全部图表
-        └── test_bootstrap.py       # 稳定性测试
+math-thinking-practice
+│  .gitignore
+│  .python-version
+│  ISSUES.md
+│  LICENSE
+│  main.py
+│  o.txt
+│  pyproject.toml
+│  README.md
+│  TASK.md
+│  uv.lock
+│
+├─data
+│      sample_data.csv
+│      task1.md
+│      task3.md
+│
+├─figures
+│  ├─task1
+│  │      task1_convergence_curve_set1.svg
+│  │      task1_convergence_curve_set2.svg
+│  │      task1_convergence_curve_set3.svg
+│  │      task1_heatmap_set1.svg
+│  │      task1_heatmap_set2.svg
+│  │      task1_heatmap_set3.svg
+│  │      task1_runtime_comparison_set1.svg
+│  │      task1_runtime_comparison_set2.svg
+│  │      task1_runtime_comparison_set3.svg
+│  │      task1_solution_comparison_set1.svg
+│  │      task1_solution_comparison_set2.svg
+│  │      task1_solution_comparison_set3.svg
+│  │
+│  ├─task2
+│  │      task2_state_space.svg
+│  │      task2_state_space_path.svg
+│  │      task2_truth_table_matrix.svg
+│  │
+│  └─task3
+│          task3_bootstrap_distribution_100.svg
+│          task3_bootstrap_distribution_1000.svg
+│          task3_bootstrap_distribution_500.svg
+│          task3_confidence_interval_100.svg
+│          task3_confidence_interval_1000.svg
+│          task3_confidence_interval_500.svg
+│          task3_evolution_curve_100.svg
+│          task3_evolution_curve_1000.svg
+│          task3_evolution_curve_500.svg
+│          task3_original_distribution_100.svg
+│          task3_original_distribution_1000.svg
+│          task3_original_distribution_500.svg
+│
+└─tasks
+    ├─bootstrap
+    │      core.py
+    │      README.md
+    │      test.py
+    │      visualize.py
+    │      __init__.py
+    │
+    ├─iterative
+    │      core.py
+    │      README.md
+    │      test.py
+    │      visualize.py
+    │      __init__.py
+    │
+    └─three_switch
+            core.py
+            README.md
+            test.py
+            visualize.py
+            __init__.py
 ```
 
 核心目录说明如下：
@@ -173,16 +205,6 @@ python visualize.py
 
 每个任务的 `visualize.py` 独立运行，不会干扰其他任务。
 
-### 3. 运行单元测试
-
-使用 `pytest` 进行各模块的单元测试 (需先安装 `pytest`)：
-
-```bash
-pytest tasks/task1_iterative/test_solver.py
-pytest tasks/task2_three_switch/test_logic.py
-pytest tasks/task3_bootstrap/test_bootstrap.py
-```
-
 ## 报告与过程文档
 
 - **`reports/实践报告.md`** ：按照课程提供的报告模板，完整填写三个任务的模型建立、算法实现、可视化图表和结果分析。
@@ -205,9 +227,7 @@ pytest tasks/task3_bootstrap/test_bootstrap.py
 
 ## 贡献者
 
-- 小组：第 X 组 (请填写实际组号)
-
-- 成员：XXX、XXX、XXX (请填写真实姓名)
+- 小组：第 51 组
 
 ## 致谢
 

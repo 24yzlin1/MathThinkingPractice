@@ -2,8 +2,12 @@ import numpy as np
 import typing as t
 import time
 
-from core import *
-from visualize import *
+try:
+    from .core import *
+    from .visualize import *
+except:
+    from core import *
+    from visualize import *
 
 
 class Dataset(t.TypedDict):

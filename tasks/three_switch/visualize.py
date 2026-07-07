@@ -13,8 +13,9 @@ plt.rcParams["axes.unicode_minus"] = False
 
 OUTPUT_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    "figures",
+    "figures/task2",
 )
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 def plot_truth_table_matrix(switch_count=3):
@@ -55,7 +56,7 @@ def plot_truth_table_matrix(switch_count=3):
 
     plt.title(f"三控开关真值表 (共 {2**switch_count} 种状态)", fontsize=16, pad=20)
 
-    path = os.path.join(OUTPUT_DIR, "task2_truth_table_matrix.png")
+    path = os.path.join(OUTPUT_DIR, "task2_truth_table_matrix.svg")
     plt.savefig(path, dpi=300, bbox_inches="tight")
     plt.show()
     plt.close()
@@ -116,7 +117,7 @@ def plot_state_space_graph(switch_count=3, highlight_path=None):
     plt.axis("off")
 
     suffix = "_path" if highlight_path else ""
-    path = os.path.join(OUTPUT_DIR, f"task2_state_space{suffix}.png")
+    path = os.path.join(OUTPUT_DIR, f"task2_state_space{suffix}.svg")
     plt.savefig(path, dpi=300, bbox_inches="tight")
     plt.show()
     plt.close()
@@ -152,7 +153,7 @@ def plot_output_state_distribution(switch_count=3):
     plt.title("Output State Distribution\n(Light ON vs OFF Ratio)", fontsize=14)
     plt.axis("equal")  # 保证饼图是正圆
 
-    save_path = os.path.join(OUTPUT_DIR, "task2_result_output_distribution.png")
+    save_path = os.path.join(OUTPUT_DIR, "task2_result_output_distribution.svg")
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
     plt.show()
@@ -212,7 +213,7 @@ def plot_correctness_verification_table(switch_count=3):
         pad=20,
     )
 
-    save_path = os.path.join(OUTPUT_DIR, "task2_result_correctness_verification.png")
+    save_path = os.path.join(OUTPUT_DIR, "task2_result_correctness_verification.svg")
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
     plt.show()

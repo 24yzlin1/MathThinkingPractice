@@ -1,7 +1,10 @@
+try:
+    from .core import *
+    from .visualize import *
+except:
+    from core import *
+    from visualize import *
 
-from core import build_truth_table, toggle_bit, get_light
-
-from visualize import plot_truth_table_matrix, plot_state_space_graph, plot_output_state_distribution, plot_correctness_verification_table
 
 def test_truth_table(switch_count: int = 3):
     print("Printing truth table...")
@@ -18,12 +21,7 @@ def test_visualization():
 
     plot_state_space_graph()
 
-    demo_path = [
-        [0, 0, 0],
-        [1, 0, 0],
-        [1, 1, 0],
-        [1, 1, 1]
-    ]
+    demo_path = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [1, 1, 1]]
     plot_state_space_graph(highlight_path=demo_path)
 
     print("All images saved to 'figures' folder!")
@@ -40,7 +38,7 @@ def test_toggle_bit(switch_count: int = 3):
     while True:
         user_input = input(f"\nEnter switch (0 ~ {switch_count - 1}): ")
 
-        if user_input.lower() == 'q':
+        if user_input.lower() == "q":
             print("Exit program.")
             break
 

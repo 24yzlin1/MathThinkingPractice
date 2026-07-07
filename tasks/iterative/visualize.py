@@ -7,7 +7,8 @@ plt.rcParams["font.sans-serif"] = ["SimHei", "Arial Unicode MS"]
 plt.rcParams["axes.unicode_minus"] = False
 
 
-SAVE_DIR = "figures"
+SAVE_DIR = "figures/task1"
+os.makedirs(SAVE_DIR, exist_ok=True)
 
 
 def plot_matrix_heatmap(A, name: str):
@@ -21,7 +22,7 @@ def plot_matrix_heatmap(A, name: str):
     plt.ylabel("行索引")
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, f"task1_heatmap_{name}.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_heatmap_{name}.svg")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Heatmap saved to: {save_path}")
@@ -62,7 +63,7 @@ def plot_error_curves(jacobi_hist, name: str, gs_hist=None, tol=1e-8):
     plt.grid(True, which="both", ls="-", alpha=0.5)
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, f"task1_convergence_curve_{name}.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_convergence_curve_{name}.svg")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Convergence curve saved to: {save_path}")
@@ -102,7 +103,7 @@ def plot_solution_comparison(x_exact, jacobi_x, gs_x, name: str):
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, f"task1_solution_comparison_{name}.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_solution_comparison_{name}.svg")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Solution comparison saved to: {save_path}")
@@ -137,7 +138,7 @@ def plot_runtime_comparison(jacobi_time, gs_time, name: str):
     plt.grid(True, axis="y", alpha=0.3)
     plt.tight_layout()
 
-    save_path = os.path.join(SAVE_DIR, f"task1_runtime_comparison_{name}.png")
+    save_path = os.path.join(SAVE_DIR, f"task1_runtime_comparison_{name}.svg")
     plt.savefig(save_path, dpi=300)
     plt.show()
     print(f"Runtime comparison saved to: {save_path}")

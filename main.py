@@ -36,7 +36,9 @@ def main():
     print()
 
     print("=== Task 3: Bootstrap Estimation ===")
-    t3.test_distribution()
+    t3.test_bootstrap_workflow(iterations=100)
+    t3.test_bootstrap_workflow(iterations=500)
+    t3.test_bootstrap_workflow(iterations=1000)
 
 
 if __name__ == "__main__":
